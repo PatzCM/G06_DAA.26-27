@@ -32,6 +32,40 @@ def engineer_features(X, df_original):
     chronic_disease_columns = [c for c in X.columns if c.startswith('CD1') and len(c) == 4]
     X['CHRONIC_DISEASE_COUNT'] = (X[chronic_disease_columns] == 'Sim').sum(axis=1) 
 
+    # Ordinal fix for HS1
+    hs1_order = {
+        'Muito mau': 0,
+        'Mau': 1,
+        'Razoável': 2,
+        'Bom': 3,
+        'Muito bom': 4,
+        'Sem resposta': -1,
+    }
+    X['HS1'] = X['HS1'].map(hs1_order)
+
+    # Ordinal fix for HATLEVEL
+    education_order = {
+        'Nenhum nível completado': 0,
+        'Básico 1º e 2º ciclo': 1,
+        'Básico 3º ciclo': 2,
+        'Secundário': 3,
+        'Pós secundário': 4,
+        'C.T.Superior Profissional': 5,
+        'Bacharelato ou licenciatura 1º ciclo': 6,
+        'Licenciatura pré-bolonha ou mestrado 2º ciclo': 7,
+        'Doutoramento': 8,
+    }
+    X['HATLEVEL'] = X['HATLEVEL'].map(education_order)
+
+    # Ordinal fix for HHINCOME
+    income_order = {
+        '1º quintil': 0,
+        '2º quintil': 1,
+        '3º quintil': 2,
+        '4º quintil': 3,
+        '5º quintil': 4,
+    }
+    X['HHINCOME'] = X['HHINCOME'].map(income_order)
 
     #NOTE: Adult children counter
     X['HAS_ADULT_CHILDREN'] = X['HHTYPE'].isin([
@@ -41,6 +75,10 @@ def engineer_features(X, df_original):
 
     X['HAS_YOUNG_CHILDREN'] = (X['HHNBPERS_0_13_COD'] != '0.0').astype(int)
 
+    # Milestone indicators from MAINSTAT
+    X['IS_RETIRED'] = (X['MAINSTAT'] == 'Reformado, com reforma antecipada ou cessou a atividade').astype(int)
+    X['IS_STUDENT'] = (X['MAINSTAT'] == 'Aluno, estudante, ou em estágio curricular').astype(int)
+    X['IS_DISABLED'] = (X['MAINSTAT'] == 'Incapacitado permanente para o trabalho').astype(int)
     # Drop the original columns that we don't need anymore
     X = X.drop(columns=['BM1', 'BM2'])
     return X
