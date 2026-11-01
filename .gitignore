@@ -224,3 +224,7 @@ datasets/*.zip
 datasets/submission*.csv
 datasets/example_submission*.csv
 datasets/*.png
+
+# Never track any markdown files except README.md
+*.md
+!README.md
