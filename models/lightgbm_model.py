@@ -35,8 +35,9 @@ class LightGBMModel(BaseModelWrapper):
         if kwargs:
             params.update(kwargs)
 
+        # Allow n_estimators=... like the other wrappers (number of boosting rounds)
+        self.num_boost_round = int(params.pop('n_estimators', cfg.LGB_N_ESTIMATORS))
         self.params = params
-        self.num_boost_round = cfg.LGB_N_ESTIMATORS
         self.booster: Optional[lgb.Booster] = None
         self.best_iteration_: Optional[int] = None
 
@@ -63,7 +64,8 @@ class LightGBMModel(BaseModelWrapper):
             valid_sets=valid_sets if valid_sets else None,
             callbacks=callbacks,
         )
-        self.best_iteration_ = self.booster.best_iteration
+        # best_iteration is 0 when there was no early stopping -> all rounds were used
+        self.best_iteration_ = self.booster.best_iteration or self.num_boost_round
         return self
 
     def predict_proba(self, X: pd.DataFrame) -> np.ndarray:

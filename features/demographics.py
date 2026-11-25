@@ -70,7 +70,10 @@ class DemographicFeatureTransformer(BaseTransformer):
             ]).astype(int)
 
         if 'HHNBPERS_0_13_COD' in X.columns:
-            X['HAS_YOUNG_CHILDREN'] = (X['HHNBPERS_0_13_COD'] != '0.0').astype(int)
+            # NumericFeatureTransformer runs first and turns this column into floats,
+            # so compare numerically (comparing to the string '0.0' made it always 1).
+            n_kids = pd.to_numeric(X['HHNBPERS_0_13_COD'], errors='coerce')
+            X['HAS_YOUNG_CHILDREN'] = (n_kids.fillna(0) > 0).astype(int)
 
         # TODO (Growth Area):
         # 1. Create composite status: IS_RETIRED * IS_WIDOWED (amplifies probability of brackets 13-15).

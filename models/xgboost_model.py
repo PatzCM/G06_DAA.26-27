@@ -52,7 +52,11 @@ class XGBoostModel(BaseModelWrapper):
             )
             self.best_iteration_ = getattr(self.model, 'best_iteration', None)
         else:
+            # No validation set (e.g. final refit on all data): early stopping is impossible,
+            # so train exactly n_estimators trees (pass the CV best iteration via n_estimators=...).
+            self.model.set_params(early_stopping_rounds=None)
             self.model.fit(X_train, y_train, verbose=False)
+            self.best_iteration_ = self.model.get_params()['n_estimators']
             
         return self
 

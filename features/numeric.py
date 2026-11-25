@@ -7,6 +7,15 @@ import pandas as pd
 from .base import BaseTransformer
 
 
+def to_numeric_capped(series: pd.Series) -> pd.Series:
+    """
+    Parse numeric strings, keeping top-coded values such as '>=3' or '>= 181' as their
+    lower bound (3, 181) instead of losing them as NaN.
+    """
+    cleaned = series.astype('string').str.replace(r'^\s*>=?\s*', '', regex=True)
+    return pd.to_numeric(cleaned, errors='coerce')
+
+
 class NumericFeatureTransformer(BaseTransformer):
     """
     Detects and converts columns containing numeric string values (e.g. '0200', '15.0')
@@ -31,7 +40,7 @@ class NumericFeatureTransformer(BaseTransformer):
                 continue
             
             # Test how many values parse as numeric
-            parsed = pd.to_numeric(valid_non_null, errors='coerce')
+            parsed = to_numeric_capped(valid_non_null)
             ratio = parsed.notna().sum() / len(valid_non_null)
             if ratio >= self.threshold:
                 self.discovered_numeric_cols.append(col)
@@ -44,7 +53,7 @@ class NumericFeatureTransformer(BaseTransformer):
         # Convert detected numeric columns
         for col in self.discovered_numeric_cols:
             if col in X.columns:
-                X[col] = pd.to_numeric(X[col], errors='coerce')
+                X[col] = to_numeric_capped(X[col])
 
         # BMI Computation
         if 'BM1' in X.columns and 'BM2' in X.columns:
