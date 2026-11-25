@@ -1,0 +1,16 @@
+,indicador,media_geral,dif_parece_mais_velho,dif_parece_mais_novo
+CHRONIC_DISEASE_COUNT,Nº de doenças crónicas (CD1A-CD1P),2.561,0.567,-1.864
+HAS_CHRONIC_CONDITION,Tem problema de saúde prolongado (HS2),0.57,0.099,-0.31
+HS1_ORDERED,Saúde autoavaliada (0=muito má … 4=muito boa),2.358,-0.486,0.605
+SEVERELY_LIMITED,Severamente limitado nas atividades (HS3),0.075,0.11,-0.124
+BMI,IMC,26.35,1.878,-0.721
+IS_RETIRED,Reformado,0.351,0.073,-0.216
+IS_STUDENT,Estudante,0.048,-0.168,0.013
+IS_EMPLOYED,Tem emprego,0.442,-0.021,0.146
+IS_WIDOWED,Viúvo,0.153,0.054,-0.212
+IS_SINGLE,Solteiro,0.255,-0.277,0.297
+HATLEVEL_ORDERED,Escolaridade (0=nenhuma … 8=doutoramento),2.346,-1.113,1.058
+HHINCOME_ORDERED,Quintil de rendimento (0=1º … 4=5º),1.901,0.02,0.267
+LIVES_ALONE,Vive sozinho,0.274,0.173,-0.235
+DRINKS_DAILY,Bebe álcool todos/quase todos os dias (AL1),0.189,0.106,0.062
+IS_FEMALE,Mulher,0.571,-0.345,-0.216
