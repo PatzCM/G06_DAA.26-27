@@ -34,15 +34,24 @@ class ProjectConfig:
     ])
     
     # Model defaults (Mid-tier baseline settings with room for tuning)
+    # XGBoost: shallower, more regularized trees. 5-fold CV (lr=0.1) went from 0.4618
+    # (depth 5, colsample 0.7, min_child_weight 3) to 0.4713 with these values.
     XGB_LEARNING_RATE: float = 0.05
-    XGB_MAX_DEPTH: int = 5
-    XGB_N_ESTIMATORS: int = 1000
+    XGB_MAX_DEPTH: int = 3
+    XGB_N_ESTIMATORS: int = 3000
     XGB_SUBSAMPLE: float = 0.8
-    XGB_COLSAMPLE: float = 0.7
+    XGB_COLSAMPLE: float = 0.3
+    XGB_MIN_CHILD_WEIGHT: float = 5
+    XGB_REG_LAMBDA: float = 5.0
     
+    # LightGBM: small, heavily regularized trees. 5-fold CV (lr=0.1) went from 0.4512
+    # (num_leaves=31, colsample=0.8, min_child=20) to 0.4698 with these values — see experiments.csv.
     LGB_LEARNING_RATE: float = 0.05
-    LGB_NUM_LEAVES: int = 31
-    LGB_N_ESTIMATORS: int = 1000
+    LGB_NUM_LEAVES: int = 4
+    LGB_COLSAMPLE: float = 0.2
+    LGB_MIN_CHILD_SAMPLES: int = 80
+    LGB_LAMBDA_L2: float = 10.0
+    LGB_N_ESTIMATORS: int = 3000
 
 
 # Global singleton instance
