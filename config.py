@@ -24,6 +24,14 @@ class ProjectConfig:
     N_SPLITS: int = 5
     TEST_SIZE: float = 0.2
     
+    # Questions the survey only asks from bracket 9 upwards (always "Não aplicável" for brackets 0-8).
+    # They encode age by questionnaire design, not by profile: fine for the competition model, but
+    # excluded from the anomaly model (otherwise it can never flag cross-boundary anomalies).
+    ROUTING_COLS: List[str] = field(default_factory=lambda: [
+        "PC1A", "PC1B", "PC1C", "PC1D", "PC1E", "IN15",
+        "HA1A", "HA1B", "HA1C", "HA1D", "HA1E", "HA1F", "HA1G",
+    ])
+
     # Missing / special category markers in Portuguese survey data
     NULL_MARKERS: List[str] = field(default_factory=lambda: [
         "Não aplicável",
